@@ -12,6 +12,7 @@ module.exports = {
         // Set up the API client
         const customSearch = google.customsearch('v1');
         var links = [];
+        const API_KEY = 'AIzaSyAhTDe5rG09vVdYhfOxw88-_Zdkzk_UwEc';
 
         // Define search parameters
         const params = {
