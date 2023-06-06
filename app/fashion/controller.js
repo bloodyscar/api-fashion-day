@@ -1,7 +1,29 @@
 const { google } = require('googleapis');
+const tf = require('@tensorflow/tfjs-node');
+const path = require('path');
+
+async function loadModel() {
+    // Get the absolute path to the model directory
+    const modelDirectory = path.resolve(__dirname, '../../model');
+
+    // Construct the absolute path to the model file
+    const modelPath = path.join(modelDirectory, 'model_fashion.json');
+    console.log(modelPath)
+
+
+    const model = await tf.loadLayersModel(`file://${modelPath}`);
+    return model;
+}
 
 module.exports = {
-    homeFashion: function (req, res, next) {
+    homeFashion: async function (req, res, next) {
+        let model;
+        // Load the model
+        model = await loadModel();
+
+
+        console.log('Model loaded successfully.');
+
         res.status(200).json({
             status: 'success',
             message: 'Successfully get home fashion',
