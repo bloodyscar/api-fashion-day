@@ -93,7 +93,7 @@ module.exports = {
 
         // Define search parameters
         const params = {
-            q: 'black shirt ootd', // The query string
+            q: 'korean outfit of the day', // The query string
             cx: '31ec515b6a0d04171', // The search engine ID (CX ID)
             searchType: 'image', // The search type,
             num: 10,
