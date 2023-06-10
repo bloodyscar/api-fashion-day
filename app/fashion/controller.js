@@ -114,6 +114,7 @@ module.exports = {
                 console.log('  Link:', item.link);
                 // Create an object
                 var object = {
+                    nama: `Testing ${i}`,
                     photo: item.link
                 };
                 links.push(object);
