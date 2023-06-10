@@ -1,0 +1,17 @@
+black
+red
+brown
+dress
+green
+hoodie
+pants
+pink
+blue
+shirt
+shoes
+shorts
+silver
+skirt
+suit
+white
+yellow
