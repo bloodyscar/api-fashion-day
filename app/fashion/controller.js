@@ -4,6 +4,8 @@ const paths = require('path');
 const { file } = require('googleapis/build/src/apis/file');
 var fs = require("fs")
 
+const API_KEY = 'AIzaSyAhTDe5rG09vVdYhfOxw88-_Zdkzk_UwEc';
+
 async function loadModel() {
     // Get the absolute path to the model directory
     const modelDirectory = paths.resolve(__dirname, '../../model');
@@ -64,33 +66,59 @@ module.exports = {
         console.log(indices)
 
 
-
-
         const text = fs.readFileSync('uploads/fashion.txt', 'utf8');
         let fashion = text.split("\n")
         let predictions = []
         for (i = 0; i < 2; i++) {
             if (values[i] > 0.01) {
-                predictions.push({
-                    type: fashion[indices[i]],
-                    pct: (values[i] * 100).toFixed(2)
-                })
+                predictions.push(
+                    fashion[indices[i]],
+                )
             }
         }
+        let gender = req.body.gender
+
+        let query = `${predictions.join(" ")} outfit women`
+
+        // Set up the API client
+        var links = [];
+        const customSearch = google.customsearch('v1');
+        // Define search parameters
+        const params = {
+            q: query, // The query string
+            cx: '31ec515b6a0d04171', // The search engine ID (CX ID)
+            searchType: 'image', // The search type,
+            num: 10,
+            aspectRatio: 'tall',
+        };
+
+        const searchResult = await customSearch.cse.list({ auth: API_KEY, cx: params.cx, q: params.q, searchType: params.searchType, num: params.num, aspectRatio: params.aspectRatio });
+        // Process the search results
+        const items = searchResult.data.items;
+        if (items.length === 0) {
+            console.log('No results found.');
+        } else {
+            console.log('=== Search results:');
+            console.log(items)
+
+            items.forEach((item, i) => {
+
+                links.push({ photo: item.link });
+            });
+        }
+
         res.status(200).json({
             status: 'success',
             message: 'Successfully get fashion prediction',
-            data: predictions
+            predictions: query,
+            data: links
         })
 
     },
     getBestToday: async function (req, res, next) {
         // Set up the API client
-        const customSearch = google.customsearch('v1');
         var links = [];
-        const API_KEY = 'AIzaSyAhTDe5rG09vVdYhfOxw88-_Zdkzk_UwEc';
-
-
+        const customSearch = google.customsearch('v1');
         // Define search parameters
         const params = {
             q: 'korean outfit of the day', // The query string
